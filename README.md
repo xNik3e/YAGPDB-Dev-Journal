@@ -1,6 +1,10 @@
 # YAGPDB-Dev-Journal
 
-Source code for simple development blog/journal capable of tracking current progress and future goals. 
+Source code for very simple development blog/journal capable of tracking current progress and future goals. 
+It uses YAGPDB's ticket system, so be sure to enable it first!
+My custom welcome message can be found in ticket-message.yag file
+
+Enjoy ^^
 
 ---
 
