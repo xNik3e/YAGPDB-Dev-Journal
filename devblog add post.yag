@@ -1,0 +1,27 @@
+{{try}}
+	{{$tempChannel := (dbGet .User.ID "channel").Value}}
+	{{$nazwa := (getChannel $tempChannel).Mention}}
+	{{if eq $nazwa (getChannel nil).Mention}}
+		{{$desc:= (dbGet .User.ID "description").Value}}
+		{{$goal := (dbGet .User.ID "goal").Value}}
+		{{$nb:= (dbGet .User.ID "numberOfPosts").Value}}
+		{{if and (eq $desc "empty") (eq $goal "empty")}}
+			You can not create empty post!!!
+		{{else}}
+			{{$dbEntryName := (joinStr "" "Post_" $nb)}}
+			{{$embeded := cembed `description` (joinStr "" "Post number " $nb " Created at " (formatTime currentTime ("01/02 03:04:05PM"))
+				"\n\n**Your description:**\n"
+    				$desc
+    				"\n**Your goals:**\n"
+    				$goal)}}
+			{{sendMessage nil $embeded}}
+			{{$embededMess := (joinStr "|" $desc $goal (formatTime currentTime ("01/02 03:04:05PM")))}}
+			{{dbSet .User.ID $dbEntryName (toString $embededMess)}}
+			{{dbSet .User.ID "description" "empty"}}
+			{{dbSet .User.ID "goal" "empty"}}
+			{{addReactions "👌"}}
+			{{deleteTrigger (5)}}
+		{{end}}
+	{{end}}
+{{catch}}
+{{end}}

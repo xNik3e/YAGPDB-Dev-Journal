@@ -1,0 +1,25 @@
+{{try}}
+{{$tempChannel := (dbGet .User.ID "channel").Value}}
+{{$nazwa := (getChannel $tempChannel).Mention}}
+{{if eq $nazwa (getChannel nil).Mention}}
+	{{$desc:= (dbGet .User.ID "description").Value}}
+	{{$goal := (dbGet .User.ID "goal").Value}}
+	{{if and (eq $desc "empty") (eq $goal "empty")}}
+		{{dbSet .User.ID "numberOfPosts" (add (toInt (dbGet .User.ID "numberOfPosts").Value) 1)}}
+	{{end}}
+	{{if eq $goal "empty"}}
+		{{$g:= (reReplace "<g>" .Message.Content "-")}}
+		{{$newG := joinStr "" $g "\n"}}
+		{{dbSet .User.ID "goal" $newG}}
+	{{else}}
+		{{$g := (reReplace "<g>" .Message.Content "-")}}
+		{{$pGoal := (dbGet .User.ID "goal").Value}}
+		{{$newG := joinStr "" $pGoal $g "\n"}}
+		{{dbSet .User.ID "goal" $newG}}
+	{{end}}
+	{{addReactions "👌"}}
+	{{deleteTrigger (5)}}
+ 
+{{end}}
+{{catch}}
+{{end}}

@@ -1,0 +1,16 @@
+{{try}}
+{{$tempChannel := (dbGet .User.ID "channel").Value}}
+{{$nazwa := (getChannel $tempChannel).Mention}}
+{{if eq $nazwa (getChannel nil).Mention}}
+	{{$description := (dbGet .User.ID "description").Value}}
+	{{$goal:= (dbGet .User.ID "goal").Value}}
+	{{$nb:= (dbGet .User.ID "numberOfPosts").Value}}
+ 
+	Posts {{$nb}}
+	Last descriptions {{$description}}
+	Last goals {{$goal}}
+	{{deleteTrigger (2)}}
+	{{deleteResponse (30)}}
+{{end}}
+{{catch}}
+{{end}}

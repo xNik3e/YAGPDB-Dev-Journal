@@ -1,0 +1,9 @@
+{{$userID := .User.ID}}
+ 
+{{dbDel $userID "numberOfPosts"}}
+{{dbDel $userID "description"}}
+{{dbDel $userID "goal"}}
+{{dbDel $userID "channel"}}
+{{deleteTrigger (2)}}
+{{deleteResponse (2)}}
+DONE

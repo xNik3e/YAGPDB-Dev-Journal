@@ -1,0 +1,22 @@
+{{try}}
+	{{$tempChannel := (dbGet .User.ID "channel").Value}}
+	{{$nazwa := (getChannel $tempChannel).Mention}}
+	{{if eq $nazwa (getChannel nil).Mention}}
+		{{$nb:= (toInt (dbGet .User.ID "numberOfPosts").Value)}}
+		{{$userID := .User.ID}}	
+		{{addReactions "👌"}}
+		{{deleteTrigger (5)}}
+		{{ range $x := seq 0 $nb }} 
+			{{$number := add $x 1 }} 
+			{{$name := (joinStr "" "Post_" $number)}} 
+			{{$temp := (dbGet $userID $name).Value}}
+			{{$sTemp := split $temp "|"}}
+			{{$embeded := cembed `description` (joinStr "" "Post number " $number " Created at " (index $sTemp 2)				
+				"\n\n**Your description:**\n"
+    				(index $sTemp 0)
+    				"\n**Your goals:**\n"
+    				(index $sTemp 1))}}
+			{{sendMessage nil $embeded}}
+		{{ end }}
+	{{end}}
+{{catch}}{{end}}

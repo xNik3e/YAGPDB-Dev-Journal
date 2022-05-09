@@ -1,0 +1,29 @@
+{{$user := .User.Username}} {{$userID := .User.ID}}
+{{$channelName := joinStr "" ($user) "-devblog" }} 
+{{$tempChannel := (dbGet .User.ID "channel").Value}}
+{{try}}
+	{{$nazwa := (getChannel $tempChannel).Mention}}
+	{{if $tempChannel}}
+		You can not have more than one blog at any given time!
+	{{else}}
+		Hello {{$user}}. I created a ticket for you: {{$channelName}}
+		{{$ticketID := createTicket $userID $channelName }}
+		You can access it here: {{(getChannel $ticketID.ChannelID).Mention}}
+		{{$personalChannel := $ticketID.ChannelID}}
+		{{dbSet $userID "channel" (getChannel $personalChannel).Name}}
+		{{dbSet $userID "numberOfPosts" 0}}
+		{{dbSet $userID "description" "empty"}}
+		{{dbSet $userID "goal" "empty"}}
+	{{end}}	
+{{catch}}
+	Hello {{$user}}. I created a ticket for you: {{$channelName}}
+	{{$ticketID := createTicket $userID $channelName }}
+	You can access it here: {{(getChannel $ticketID.ChannelID).Mention}}
+	{{$personalChannel := $ticketID.ChannelID}}
+	{{dbSet $userID "channel" (getChannel $personalChannel).Name}}
+	{{dbSet $userID "numberOfPosts" 0}}
+	{{dbSet $userID "description" "empty"}}
+	{{dbSet $userID "goal" "empty"}}
+{{end}}
+{{deleteTrigger (2)}}
+{{deleteResponse (5)}}

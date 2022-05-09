@@ -1,0 +1,15 @@
+{{$embed := cembed `description` (joinStr `` `Hi ` .User.Mention `
+Welcome to your personal blog! Here you will be able to describe your projects and the progress made! ` 
+"A post can consist of two fields. A description field and a goal field\n\n"
+"To add a description of the changes made, start your message with <d>\n"
+"A correctly entered description will be confirmed by the bot by adding a reaction to the message\n\n"
+"To add another goal start your message with <g>\n"
+"A correctly entered goal will be confirmed by the bot by adding a reaction to the message\n\n"
+"You can add as many descriptions and goals as you want, however, in order for the post to be entered into the database, use this command:\n"
+"`-devblog add post`"
+"\n\nUse this command to close your blog\n"
+"`-devblog close`\n\n"
+"Use this command to add people to your blog\n"
+"*Work in progress*\n"
+"`-devblog adduser @user`")}}
+{{sendMessage nil $embed}}
